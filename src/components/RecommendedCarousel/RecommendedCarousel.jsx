@@ -1,69 +1,93 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import "swiper/css/autoplay"; 
-import { Navigation, Autoplay } from "swiper/modules"; 
+import "swiper/css/autoplay";
+import { Navigation, Autoplay } from "swiper/modules";
 
 import RecommendedCard from "../RecommendedCard/RecommendedCard";
-
-const fakeHotels = [
-  {
-    id: 1,
-    name: "Marriott Resort",
-    location: "Cairo",
-    image: "https://via.placeholder.com/300x200",
-    price: 120,
-  },
-  {
-    id: 2,
-    name: "Hilton Nile",
-    location: "Luxor",
-    image: "https://via.placeholder.com/300x200",
-    price: 90,
-  },
-  {
-    id: 3,
-    name: "Four Seasons",
-    location: "Sharm El-Sheikh",
-    image: "https://via.placeholder.com/300x200",
-    price: 180,
-  },
-  {
-    id: 4,
-    name: "Steigenberger",
-    location: "Alexandria",
-    image: "https://via.placeholder.com/300x200",
-    price: 110,
-  },
-];
+import { Link } from "react-router-dom";
+import { fetchRecommendedHotels } from "../../store/recommendedHotelsSlice";
 
 function RecommendedCarousel() {
+  const dispatch = useDispatch();
+  const { recommendedHotels, loading, error } = useSelector((state) => state.recommendedHotels);
+
+  useEffect(() => {
+    dispatch(fetchRecommendedHotels());
+  }, [dispatch]);
+
+  // Debug logging
+  useEffect(() => {
+    console.log('RecommendedHotels data:', recommendedHotels);
+    console.log('Loading state:', loading);
+    console.log('Error state:', error);
+  }, [recommendedHotels, loading, error]);
+
+  if (loading) {
+    return (
+      <div className="mt-2 px-6">
+        <h2 className="text-xl font-bold mb-4">Recommended Hotels</h2>
+        <div className="flex justify-center items-center h-32">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mt-2 px-6">
+        <h2 className="text-xl font-bold mb-4">Recommended Hotels</h2>
+        <div className="text-center text-red-600">
+          Error loading hotels: {error}
+        </div>
+      </div>
+    );
+  }
+
+  if (!recommendedHotels || recommendedHotels.length === 0) {
+    return (
+      <div className="mt-2 px-6">
+        <h2 className="text-xl font-bold mb-4">Recommended Hotels</h2>
+        <div className="text-center text-gray-500">
+          No recommended hotels available at the moment.
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-2 px-6  ">
       <h2 className="text-xl font-bold mb-4">Recommended Hotels</h2>
 
       <Swiper
-        modules={[Navigation, Autoplay]} 
+        modules={[Navigation, Autoplay]}
         spaceBetween={20}
-        navigation 
-        autoplay={{ delay: 3000, disableOnInteraction: false }} 
+        navigation
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
         breakpoints={{
           0: { slidesPerView: 1 },
           640: { slidesPerView: 2 },
           1024: { slidesPerView: 3 },
         }}
       >
-        {fakeHotels.map((hotel) => (
-          <SwiperSlide key={hotel.id}>
-            <RecommendedCard
-              image={hotel.image}
-              title={hotel.name} 
-              address={hotel.location} 
-              coupon={`$${hotel.price}`} 
-            />
-          </SwiperSlide>
-        ))}
+        {recommendedHotels.map((hotel) => {
+          console.log('Rendering hotel:', hotel);
+          return (
+            <SwiperSlide key={hotel.id}>
+              <Link to={`/hotel/${hotel.id}`}>
+                <RecommendedCard
+                  image={hotel.image}
+                  title={hotel.name}
+                  address={hotel.location}
+                  coupon={`$${hotel.price || 'N/A'}`}
+                />
+              </Link>
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
     </div>
   );

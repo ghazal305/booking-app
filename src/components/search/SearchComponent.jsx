@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function SearComponent() {
   return (
@@ -35,12 +36,15 @@ function SearComponent() {
         >
           Clear Filters
         </button>
-        <button
-          type="submit"
-          className="bg-red-600 text-white rounded-3xl px-4 py-2 mt-6 hover:bg-red-700 transition"
-        >
-          Search
-        </button>
+
+        <Link to="/search">
+          <button
+            type="submit"
+            className="bg-red-600 text-white rounded-3xl px-4 py-2 mt-6 hover:bg-red-700 transition"
+          >
+            Search
+          </button>
+        </Link>
       </form>
     </div>
   );

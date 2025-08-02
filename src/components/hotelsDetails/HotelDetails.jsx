@@ -1,15 +1,27 @@
 import { useState } from "react";
 
-const hotelImages = [
-  "https://source.unsplash.com/638x423/?hotel-pool",
-  "https://source.unsplash.com/638x423/?hotel-room",
-  "https://source.unsplash.com/638x423/?luxury-hotel",
-  "https://source.unsplash.com/638x423/?hotel-lobby",
-  "https://source.unsplash.com/638x423/?hotel-balcony",
-];
-
-export default function HotelDetails() {
+export default function HotelDetails({ hotel }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Default values in case hotel data is missing
+  const {
+    id,
+    name = "Hotel Name",
+    location = "Location",
+    description = "Hotel description",
+    rating = 4.9,
+    reviews = 275,
+    price = 399,
+    discount = 20,
+    images = [
+      "https://source.unsplash.com/638x423/?hotel-pool",
+      "https://source.unsplash.com/638x423/?hotel-room",
+      "https://source.unsplash.com/638x423/?luxury-hotel",
+      "https://source.unsplash.com/638x423/?hotel-lobby",
+      "https://source.unsplash.com/638x423/?hotel-balcony",
+    ],
+    amenities = ["Parking", "Attached Bathroom", "CCTV Cameras", "Wifi"]
+  } = hotel || {};
 
   const handleThumbnailClick = (index) => {
     setCurrentImageIndex(index);
@@ -20,12 +32,12 @@ export default function HotelDetails() {
       {/* Left Side: Image Slider */}
       <div className="w-[638px] h-[423px] relative">
         <img
-          src={hotelImages[currentImageIndex]}
-          alt="Hotel Preview"
+          src={images[currentImageIndex]}
+          alt={`${name} Preview`}
           className="rounded-xl w-full h-full object-cover"
         />
         <div className="flex justify-center mt-2 gap-2 absolute bottom-2 left-1/2 -translate-x-1/2">
-          {hotelImages.map((img, index) => (
+          {images.map((img, index) => (
             <img
               key={index}
               src={img}
@@ -45,41 +57,44 @@ export default function HotelDetails() {
       <div className="flex-1 flex flex-col justify-between py-2">
         <div>
           <h2 className="text-2xl font-bold mb-2">
-            San Francisco Marriott Marquis
+            {name}
           </h2>
           <div className="flex items-center gap-2 mb-3">
             <span className="bg-blue-800 text-white px-2 py-1 text-sm font-semibold rounded">
-              4.9 ★
+              {rating} ★
             </span>
-            <span className="text-sm text-gray-700">Exilent</span>
-            <span className="text-sm text-gray-500">275 Review</span>
+            <span className="text-sm text-gray-700">Excellent</span>
+            <span className="text-sm text-gray-500">{reviews} Reviews</span>
           </div>
 
           <h3 className="font-semibold mb-1">About</h3>
           <p className="text-sm text-gray-600 line-clamp-3 mb-2">
-            Whether you are in town for business or leisure, San Francisco
-            welcomes travelers to Northern California with exceptional service,
-            hotel rooms and suites and a prime downtown location.
+            {description}
           </p>
 
           <div className="flex items-center text-sm text-gray-600 mb-3">
-            📍 780 Mission Street, San Francisco, CA 94103, United States
+            📍 {location}
           </div>
 
           <h4 className="font-semibold mb-1">Popular Service</h4>
           <div className="flex flex-wrap gap-3 text-sm text-gray-700">
-            <span>🅿️ Parking</span>
-            <span>🚿 Attached Bathroom</span>
-            <span>📹 CCTV Cameras</span>
-            <span>📶 Wifi</span>
+            {amenities.map((amenity, index) => (
+              <span key={index}>
+                {amenity === "Parking" && "🅿️"}
+                {amenity === "Attached Bathroom" && "🚿"}
+                {amenity === "CCTV Cameras" && "📹"}
+                {amenity === "Wifi" && "📶"}
+                {amenity}
+              </span>
+            ))}
           </div>
         </div>
 
         <div className="flex items-center justify-between mt-4">
           <div className="text-right">
-            <div className="text-red-600 font-bold text-sm mb-1">20% OFF</div>
+            <div className="text-red-600 font-bold text-sm mb-1">{discount}% OFF</div>
             <div className="text-3xl font-bold">
-              399 <span className="text-sm font-medium">USD</span>
+              {price} <span className="text-sm font-medium">USD</span>
             </div>
             <div className="text-xs text-gray-500">Per night</div>
           </div>

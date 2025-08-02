@@ -1,15 +1,13 @@
 import "./App.css";
 import React from "react";
 import Layout from "./layouts/LayOut";
-// import SearComponent from "./components/search/SearchComponent";
-import HotelDetails from "./components/hotelsDetails/HotelDetails";
+import AppRoutes from "./routes/appRoutes";
 
 function App() {
   return (
     <>
-      {/* <SearComponent /> */}
+      <AppRoutes />
       {/* <Layout /> */}
-      <HotelDetails />
     </>
   );
 }
