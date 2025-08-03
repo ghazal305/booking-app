@@ -1,7 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function HotelDetails({ hotel }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   // Default values in case hotel data is missing
   const {
@@ -25,6 +29,14 @@ export default function HotelDetails({ hotel }) {
 
   const handleThumbnailClick = (index) => {
     setCurrentImageIndex(index);
+  };
+
+  const handleBookNow = () => {
+    if (isAuthenticated) {
+      navigate(`/book/${id}`);
+    } else {
+      navigate('/login');
+    }
   };
 
   return (
@@ -99,8 +111,11 @@ export default function HotelDetails({ hotel }) {
             <div className="text-xs text-gray-500">Per night</div>
           </div>
 
-          <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-all">
-            PAY NOW
+          <button 
+            onClick={handleBookNow}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-all"
+          >
+            {isAuthenticated ? "BOOK NOW" : "LOGIN TO BOOK"}
           </button>
         </div>
       </div>

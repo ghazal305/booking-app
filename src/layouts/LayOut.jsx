@@ -12,27 +12,18 @@ const Layout = () => {
     setIsSidebarOpen((prev) => !prev);
   };
 
-  // Debug logging
-  console.log("Layout component rendered, sidebar open:", isSidebarOpen);
-
   return (
     <div className="relative min-h-screen bg-gray-100">
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Header />
+        <SearComponent />
       <div
         className={`transition-all duration-300 ${
-          isSidebarOpen ? "ml-64" : "ml-16"
+          isSidebarOpen ? "ml-60" : "ml-22"
         }`}
       >
-        <Header />
-        <SearComponent />
-
+        
         <main className="p-4 bg-gray-50 flex-1 overflow-y-auto">
-          <div
-            className="debug-info"
-            style={{ padding: "10px", background: "#f0f0f0", margin: "10px 0" }}
-          >
-            <strong>Debug:</strong> Layout Outlet should render here
-          </div>
           <Outlet />
         </main>
       </div>

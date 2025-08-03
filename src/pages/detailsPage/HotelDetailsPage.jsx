@@ -7,29 +7,17 @@ import { fetchHotelDetails, clearHotelDetails } from "../../store/hotelDetailsSl
 function HotelDetailsPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { hotel, loading, error } = useSelector((state) => state.hotelDetails);
-
-  // Debug logging
-  useEffect(() => {
-    console.log('HotelDetailsPage mounted with id:', id);
-  }, [id]);
+  const { hotelDetails, loading, error } = useSelector((state) => state.hotelDetails);
 
   useEffect(() => {
     if (id) {
-      console.log('Fetching hotel details for id:', id);
       dispatch(fetchHotelDetails(id));
     }
 
     return () => {
-      console.log('Clearing hotel details');
       dispatch(clearHotelDetails());
     };
   }, [dispatch, id]);
-
-  // Debug logging for state changes
-  useEffect(() => {
-    console.log('HotelDetailsPage state:', { hotel, loading, error });
-  }, [hotel, loading, error]);
 
   if (loading) {
     return (
@@ -55,7 +43,7 @@ function HotelDetailsPage() {
     );
   }
 
-  if (!hotel || Object.keys(hotel).length === 0) {
+  if (!hotelDetails || Object.keys(hotelDetails).length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-6xl mx-auto">
@@ -70,7 +58,7 @@ function HotelDetailsPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
-        <HotelDetails hotel={hotel} />
+        <HotelDetails hotel={hotelDetails} />
       </div>
     </div>
   );

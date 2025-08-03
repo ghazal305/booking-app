@@ -2,8 +2,11 @@ import React from "react";
 import headerbg from "../../assets/images/HeaderBG.jpg";
 import Navbar from "../navbar/Navbar";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Header() {
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+
   return (
     <header
       className="w-full h-[200px] bg-cover bg-center relative"
@@ -16,16 +19,24 @@ function Header() {
           Bookler
         </div>
         <div className="flex gap-4">
-          <Link to="/login">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-              Login
-            </button>
-          </Link>
-          <Link to="/SignupPage">
-            <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
-              Sign Up
-            </button>
-          </Link>
+          {isAuthenticated ? (
+            <div className="flex items-center gap-4">
+              <span className="text-white">Welcome, {user?.name || user?.email}</span>
+            </div>
+          ) : (
+            <>
+              <Link to="/login">
+                <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                  Login
+                </button>
+              </Link>
+              <Link to="/signup">
+                <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+                  Sign Up
+                </button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
       <Navbar />

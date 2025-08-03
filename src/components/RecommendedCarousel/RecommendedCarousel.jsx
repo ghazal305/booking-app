@@ -18,13 +18,6 @@ function RecommendedCarousel() {
     dispatch(fetchRecommendedHotels());
   }, [dispatch]);
 
-  // Debug logging
-  useEffect(() => {
-    console.log('RecommendedHotels data:', recommendedHotels);
-    console.log('Loading state:', loading);
-    console.log('Error state:', error);
-  }, [recommendedHotels, loading, error]);
-
   if (loading) {
     return (
       <div className="mt-2 px-6">
@@ -59,7 +52,7 @@ function RecommendedCarousel() {
   }
 
   return (
-    <div className="mt-2 px-6  ">
+    <div className="mt-2 px-6">
       <h2 className="text-xl font-bold mb-4">Recommended Hotels</h2>
 
       <Swiper
@@ -73,21 +66,17 @@ function RecommendedCarousel() {
           1024: { slidesPerView: 3 },
         }}
       >
-        {recommendedHotels.map((hotel) => {
-          console.log('Rendering hotel:', hotel);
-          return (
-            <SwiperSlide key={hotel.id}>
-              <Link to={`/hotel/${hotel.id}`}>
-                <RecommendedCard
-                  image={hotel.image}
-                  title={hotel.name}
-                  address={hotel.location}
-                  coupon={`$${hotel.price || 'N/A'}`}
-                />
-              </Link>
-            </SwiperSlide>
-          );
-        })}
+        {recommendedHotels.map((hotel) => (
+          <SwiperSlide key={hotel.id}>
+            <RecommendedCard
+              id={hotel.id}
+              image={hotel.image}
+              title={hotel.name}
+              address={hotel.location}
+              coupon={`$${hotel.price || 'N/A'}`}
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );

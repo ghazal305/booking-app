@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function SearchCard({ hotel }) {
   const [imageError, setImageError] = useState(false);
+  const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state) => state.auth);
   
   // Default values in case hotel data is missing
   const {
@@ -22,6 +25,14 @@ function SearchCard({ hotel }) {
 
   const handleImageError = () => {
     setImageError(true);
+  };
+
+  const handleBookNow = () => {
+    if (isAuthenticated) {
+      navigate(`/book/${id}`);
+    } else {
+      navigate('/login');
+    }
   };
 
   return (
@@ -68,12 +79,15 @@ function SearchCard({ hotel }) {
           </div>
           <div className="flex gap-2">
             <Link to={`/hotel/${id}`}>
-              <button className="px-3 py-1 bg-gray-100 rounded-md text-sm font-medium">
+              <button className="px-3 py-1 bg-gray-100 rounded-md text-sm font-medium hover:bg-gray-200 transition duration-200">
                 View Details
               </button>
             </Link>
-            <button className="px-3 py-1 bg-blue-500 text-white rounded-md text-sm font-medium">
-              BOOK NOW
+            <button 
+              onClick={handleBookNow}
+              className="px-3 py-1 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-600 transition duration-200"
+            >
+              {isAuthenticated ? "BOOK NOW" : "LOGIN TO BOOK"}
             </button>
           </div>
         </div>

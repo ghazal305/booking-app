@@ -16,13 +16,13 @@ export const fetchHotelDetails = createAsyncThunk(
 const hotelDetailsSlice = createSlice({
   name: "hotelDetails",
   initialState: {
-    hotel: {},
+    hotelDetails: {},
     loading: false,
     error: null,
   },
   reducers: {
     clearHotelDetails: (state) => {
-      state.hotel = {};
+      state.hotelDetails = {};
       state.error = null;
     },
   },
@@ -34,7 +34,7 @@ const hotelDetailsSlice = createSlice({
       })
       .addCase(fetchHotelDetails.fulfilled, (state, action) => {
         state.loading = false;
-        state.hotel = action.payload;
+        state.hotelDetails = action.payload;
       })
       .addCase(fetchHotelDetails.rejected, (state, action) => {
         state.loading = false;
